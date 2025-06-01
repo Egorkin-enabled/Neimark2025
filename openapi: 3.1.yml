@@ -1,0 +1,433 @@
+openapi: '3.1.1'
+info:
+  title: Hackaton2025
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+components:
+  schemas:
+    prize:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        photo_url:
+          type: string
+    course:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        group:
+          type: string
+
+    tokens:
+      type: object
+      properties:
+        access:
+          type: string
+        # referesh:
+        #   type: string
+        user_id:
+          type: integer
+    user_out:
+      type: object
+      properties:
+        id:
+          type: integer
+        role:
+          description: Stores `Student` or `Teacher` role for the user 
+          type: string
+        photo_url:
+          description: Reference to photo.
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        patronymic:
+          type: string
+        score:
+          type: string
+    teacher_out:
+      type: object
+      properties:
+        id:
+          type: integer
+        photo_url:
+          description: Reference to photo.
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        patronymic:
+          type: string
+        likes:
+          type: integer
+        dislikes:
+          type: integer
+        
+
+
+  responses:
+    auth_success:
+      description: Auth success
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/tokens"
+
+paths:
+  /auth/log_in:
+    put:
+      description: Logins user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          $ref: "#/components/responses/auth_success"
+        
+                  
+  # /auth/refersh:
+  #   post:
+  #     description:  Refereshes access token
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               referesh: 
+  #                 type: string
+  #     responses:
+  #       200:
+  #         $ref: "#/components/responses/auth_success"
+  
+    
+  /users/{user_id}:
+    get:
+      description: Gets user by id
+      responses:
+        200:
+          description: Returns user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user_out"
+
+  /courses/{course_id}:
+    get:
+      responses:
+        200:
+          description: returns course info by id.
+          content:
+            appliciation/json:
+              schema:
+                $ref: "#/components/schemas/course"
+
+  /courses:
+    get:
+      parameters:
+        - name: search_pattern
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page_number
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Returns all courses.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page_number:
+                    type: integer
+                  page_size:
+                    type: integer
+                  contents:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/course"
+
+  /polls:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                simplicity:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                actuality:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                involvement:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                mood:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                report:
+                  type: string
+
+  /analytics:
+    get:
+      parameters:
+        - name: course_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: L
+          content:
+            appliciation/json:
+              schema:
+                type: object
+                properties:
+                  simplicity_avg:
+                    type: integer
+                    format: float
+                    minimum: 1
+                    maximum: 5
+                  actuality_avg:
+                    type: integer
+                    format: float
+                    minimum: 1
+                    maximum: 5
+                  involvement_avg:
+                    type: integer
+                    format: float
+                    minimum: 1
+                    maximum: 5
+                  simplicity_median:
+                    type: integer
+                    format: float
+                    minimum: 1
+                    maximum: 5
+                  actuality_median:
+                    type: integer
+                    format: float
+                    minimum: 1
+                    maximum: 5
+                  involvement_median:
+                    type: integer
+                    format: float
+                    minimum: 1
+                    maximum: 5
+                  bad_reports:
+                    type: integer
+                  good_reports:
+                    type: integer
+                  top_10_report_contents:
+                    type: array
+                    items:
+                      type: string
+  
+  /chat:
+    post:
+      description: publishes message.
+      parameters:
+        - name: course_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          appliciation/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+        
+    get:
+      description: Long pooling for messages
+      parameters:
+        - name: course_id
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: direction
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: message_limit
+          in: query
+          required: true
+          schema:
+            type: string
+            format: back_in_time|forward_in_time
+        - name: long_pooling
+          required: true
+          in: query
+          schema:
+            type: boolean
+        - name: last_message_id
+          in: query
+          schema:
+            type: integer
+          
+  /teacher_estimates:
+    get:
+      description: Gets all teachers to estimate.
+      # parameters:
+      #   - name: user_id
+      #     in: query
+      #     required: true
+      #   schema:
+      #     type: integer
+      responses:
+        200:
+          description: Teachers to estimate received.
+          content:
+            appliciation/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    teacher_id:
+                      type: integer
+                    teacher_photo:
+                      type: integer
+    post:
+      description: Allows to estimate.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                # user_id:
+                #   type: integer
+                teacher_id:
+                  type: integer
+                estimation:
+                  type: string
+                  format: like|dislike|IDK
+
+  /teachers:
+    get:
+      parameters:
+        - name: search_pattern
+          in: query
+          schema:
+            type: integer
+        - name: page_number
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Returns all courses.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page_number:
+                    type: integer
+                  page_size:
+                    type: integer
+                  contents:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/teacher_out"
+
+
+  /teachers/{teacher_id}:
+    get:
+      parameters:
+        - name: teacher_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Returns all courses.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/teacher_out"
+
+  /sprize_cost:
+    get:
+      description: Get score to pay.
+      responses:
+        200:
+          description: user score
+          content:
+            appliciation/json:
+              schema:
+                type: object
+                properties:
+                  scores:
+                    type: integer
+
+  /prizes:
+    get:
+      description: Gets all of user prizes.
+      responses:
+        200:
+          description: All of prizes.
+          content:
+            appliciation/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/prize"
+    post:
+      description: Pays for prize.
+      responses:
+        200:
+          description: Transaction OK
+          content:
+            appliciation/json:
+              schema:
+                $ref: "#/components/schemas/prize"
+        412:
+          description: No money enough.
+
+  
