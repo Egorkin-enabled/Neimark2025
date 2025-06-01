@@ -1,0 +1,33 @@
+@startuml
+
+actor User
+boundary Server
+
+== `DailyScreen` case == 
+
+User -> Server: <<get>> \daily_courses
+Server --> User: list of all courses of current user
+
+== `ChatScreen` case ==
+
+User -> Server: <<get>> /courses?page_number=...&page_size=...
+Server --> User: page of courses
+
+User -> Server: <<get>> /courses?search_pattern=...?page_number=...&page_size=...
+Server --> User: page of courses
+
+User -> Server: <<get>> /messages?course_id=...&direction=backward&message_limit=...&long_pooling=false
+Server --> User: List of messages
+
+User -> Server: <<post>> /messages?course_id=... { "message": ".." }
+Server --> User: 200
+
+== `AboutTeacherScreen` case ==
+
+User -> Server: <<get>> /user/<teacher_id>
+Server --> User: info
+
+User -> Server: <<get>> /courses?user_id=<teacher_id>
+Server -> User: List of courses
+
+@enduml
