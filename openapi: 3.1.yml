@@ -181,6 +181,8 @@ paths:
             schema:
               type: object
               properties:
+                course_id:
+                  type: integer
                 simplicity:
                   type: integer
                   minimum: 1
@@ -211,7 +213,7 @@ paths:
       responses:
         200:
           description: L
-          content:
+          content:polls
             appliciation/json:
               schema:
                 type: object
@@ -272,6 +274,11 @@ paths:
               properties:
                 message:
                   type: string
+      responses:
+        200:
+          description: Everything OK.
+        412:
+          description: Message validation error.
         
     get:
       description: Long pooling for messages
