@@ -67,13 +67,12 @@ components:
           type: string
         patronymic:
           type: string
+        department:
+          type: string
         likes:
           type: integer
         dislikes:
           type: integer
-        
-
-
   responses:
     auth_success:
       description: Auth success
@@ -100,7 +99,31 @@ paths:
         200:
           $ref: "#/components/responses/auth_success"
         
+
+  /teachers/{teacher_id}:
+    get:
+      responses:
+        200:
+          description: Gets info 'bout teacher.
+          content:
+            appliciation/json:
+              schema:
+                $ref: "#/components/schemas/teacher_out"
                   
+
+  /scores:
+    get:
+      responses:
+        200:
+          description: Gets score of the user by auth.
+          content:
+            appliciation/json:
+              schema:
+                type: object
+                properties:
+                  score:
+                    type: integer
+
   # /auth/refersh:
   #   post:
   #     description:  Refereshes access token
@@ -233,7 +256,7 @@ paths:
       responses:
         200:
           description: L
-          content:polls
+          content:
             appliciation/json:
               schema:
                 type: object
