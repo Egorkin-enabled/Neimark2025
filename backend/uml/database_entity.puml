@@ -1,0 +1,88 @@
+@startuml
+
+skinparam DefaultFontName FreeMono
+!theme plain
+
+title Logical database entities
+
+object DayOfWeek {
+    week_number
+    day_number
+}
+
+object Prizes {
+    name: string
+    photo: string
+}
+
+object User {
+    login: string
+    password: hash & salt
+
+    photo_url: string
+}
+
+object Message {
+    contents: string
+    date_of_creation: Datetime
+}
+
+object Teacher {
+
+}
+
+object Student {
+    score: int
+}
+
+object Course {
+
+}
+
+Course "*" --> "*" DayOfWeek: Happends at
+
+object Group {
+    name: string
+}
+
+object Relation {
+    kind: RelationKind
+    date: Datetime
+}
+
+object Opinion {
+    simplicity: 1..5
+    actuality: 1..5
+    involment: 1..5
+    mood: 1..5
+    description: string
+    datetime: Datetime
+}
+
+
+enum RelationKind {
+    Likes
+    Dislikes
+    Ignores
+}
+
+Relation "*" --> "1" RelationKind: References
+
+Message "*" <-- User: Creates many
+
+User <|-- Student
+User <|-- Teacher
+
+Student "*" --> "*" Prizes: Has many
+Student "*" ---> "*" Course: Has many
+Teacher "1" ---> "*" Course: Owns by
+
+Student "*" --> "1" Group: Belongs to
+
+Student "1" -right-> "*" Relation: Creates
+Relation "*" -right-> "1" Teacher: Describes
+
+User --> Opinion : Has
+Opinion --> Course: References
+
+@enduml
