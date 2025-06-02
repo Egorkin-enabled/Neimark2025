@@ -1,0 +1,27 @@
+<resources>
+    <string name="cyclone">Cyclone</string>
+    <string name="open_github">Open github</string>
+    <string name="run">Run</string>
+    <string name="stop">Stop</string>
+    <string name="theme">Theme</string>
+    <string name="app_name_first">ПРЕПО</string>
+    <string name="app_name_second">Rate</string>
+    <string name="enter">Вход</string>
+    <string name="email">Почта</string>
+    <string name="password">Пароль</string>
+    <string name="sign_in">Войти</string>
+    <string name="hello"> Привет, </string>
+    <string name="awards"> Награды </string>
+    <string name="chat"> Чат </string>
+    <string name="forms"> Опросы </string>
+    <string name="grade"> Оценка </string>
+    <string name="analitics"> Аналитика </string>
+    <string name="recomendations"> Рекомендации </string>
+    <string name="rating"> Рейтинг </string>
+    <string name="courses"> Курсы </string>
+    <string name="about_teacher"> О преподователе </string>
+    <string name="reviews"> Отзывы </string>
+    <string name="from">от</string>
+    <string name="to">до</string>
+    <string name="value_short">ед.</string>
+</resources>
