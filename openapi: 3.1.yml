@@ -434,21 +434,21 @@ paths:
                       $ref: "#/components/schemas/teacher_out"
 
 
-  /teachers/{teacher_id}:
-    get:
-      parameters:
-        - name: teacher_id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        200:
-          description: Returns all courses.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/teacher_out"
+  # /teachers/{teacher_id}:
+  #   get:
+  #     parameters:
+  #       - name: teacher_id
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type: integer
+  #     responses:
+  #       200:
+  #         description: Returns all courses.
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/teacher_out"
 
   /sprize_cost:
     get:

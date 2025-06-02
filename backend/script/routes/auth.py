@@ -8,27 +8,29 @@ import base64
 import io
 import string
 
-def use_authorization(inner_func, engine):
+def use_authorization(engine):
     
-    def handler():
-        auth = request.headers['Authorization']
-        
-        splitted = auth.split(' ')
-        
-        if splitted[1] != 'Bearer':
-            return Response(status=403)
-
-        bearer = splitted[2]
-
-        with Session(engine) as session:
-            user = session.query(User).where(User.access_token == bearer)
-            if not user:
+    def wrapper(inner_func):
+        def handler():
+            auth = request.headers['Authorization']
+            
+            splitted = auth.split(' ')
+            
+            if splitted[0].lower() != 'bearer':
                 return Response(status=403)
 
-            return inner_func(engine, user)
+            bearer = splitted[1]
 
-    handler.__name__ = inner_func.__name__ + '_auth_wrapped'
-    return handler
+            with Session(engine) as session:
+                user = session.query(User).where(User.access_token == bearer).first()
+                if not user:
+                    return Response(status=403)
+
+                return inner_func(engine, user)
+
+        handler.__name__ = inner_func.__name__ + '_auth_wrapped'
+        return handler
+    return wrapper
 
 def init_auth(app: Flask, engine):
     class LoginRequest(pydantic.BaseModel):
