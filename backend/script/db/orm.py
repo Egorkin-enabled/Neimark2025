@@ -45,7 +45,7 @@ class User(DB_Base):
     login: Mapped[str]
     password: Mapped[str]
     courses: Mapped[list[Course]] = relationship("Course", secondary='user_course', back_populates='user')
-    access_token: Mapped[str]
+    access_token: Mapped[str | None]
     type: Mapped[str]
     __mapper_args__ = {
         "polymorphic_identity": "user",
@@ -66,8 +66,8 @@ class Student(User):
     __tablename__ = 'student'
     id: Mapped[int] = mapped_column(ForeignKey('user.id'), primary_key=True)
     score: Mapped[int]
-    group: Mapped[Group] = relationship("Group")
-    prizes: Mapped[list[Prize]] = relationship("Prize", secondary="user_prize")
+    group: Mapped[Group] = mapped_column(ForeignKey("group.id"))
+    prizes: Mapped[list[Prize]] = relationship("Prize", secondary="student_prize")
     __mapper_args__ = {
         "polymorphic_identity": "student",
     }
@@ -82,6 +82,8 @@ class Relation(DB_Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     kind: Mapped[int]
     date: Mapped[datetime]
+    student: Mapped[Teacher] = mapped_column(ForeignKey('student.id'))
+    teacher: Mapped[Teacher] = mapped_column(ForeignKey('teacher.id'))
 
 
 class Opinion(DB_Base):
@@ -105,3 +107,4 @@ class Message(DB_Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     contents: Mapped[str]
     date_of_creation: Mapped[datetime]
+    course: Mapped[Course] = mapped_column(ForeignKey('course.id'))
