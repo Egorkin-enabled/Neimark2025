@@ -1,0 +1,28 @@
+@startmindmap
+
+!theme plain
+
+* Backend
+** scripts
+***_ Код бэкенда
+*** config.py
+****_ Позволяет настроить Backend
+*** orm
+****_ Позволяет работать с БД, как с объектами
+*** routes
+**** auth
+*****_ Авторизация
+**** stats
+*****_ Очки и прочие статусы
+**** analytics
+*****_ Результат аналитики
+**** polls
+*****_ Опросы
+** vendor
+***_ Пакеты разработки
+*** SQL Alchemy
+*** Flask
+*** Pyndatic
+
+
+@endmindmap

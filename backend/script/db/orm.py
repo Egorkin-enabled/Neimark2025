@@ -44,12 +44,18 @@ class User(DB_Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     login: Mapped[str]
     password: Mapped[str]
+    photo_url: Mapped[str | None]
+
+    first_name: Mapped[str]
+    last_name: Mapped[str]
+    patronymic: Mapped[str]
+
     courses: Mapped[list[Course]] = relationship("Course", secondary='user_course', back_populates='user')
     access_token: Mapped[str | None]
-    type: Mapped[str]
+    role: Mapped[str]
     __mapper_args__ = {
         "polymorphic_identity": "user",
-        "polymorphic_on": "type",
+        "polymorphic_on": "role",
     }
 
 class Teacher(User):

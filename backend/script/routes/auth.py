@@ -11,7 +11,7 @@ import string
 def use_authorization(engine):
     
     def wrapper(inner_func):
-        def handler():
+        def handler(**dict):
             auth = request.headers['Authorization']
             
             splitted = auth.split(' ')
@@ -26,7 +26,7 @@ def use_authorization(engine):
                 if not user:
                     return Response(status=403)
 
-                return inner_func(engine, user)
+            return inner_func(engine, user, **dict)
 
         handler.__name__ = inner_func.__name__ + '_auth_wrapped'
         return handler
@@ -55,6 +55,6 @@ def init_auth(app: Flask, engine):
             
             session.commit()
 
-            return { "access_token": user.access_token }, 200
+            return { "access_token": user.access_token, "user_id": user.id }, 200
 
 
