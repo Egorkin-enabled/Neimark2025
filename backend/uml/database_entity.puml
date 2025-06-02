@@ -10,7 +10,7 @@ object DayOfWeek {
     day_number
 }
 
-object Prizes {
+object Prize {
     name: string
     photo: string
 }
@@ -73,7 +73,7 @@ Message "*" <-- User: Creates many
 User <|-- Student
 User <|-- Teacher
 
-Student "*" --> "*" Prizes: Has many
+Student "*" --> "*" Prize: Has many
 Student "*" ---> "*" Course: Has many
 Teacher "1" ---> "*" Course: Owns by
 
@@ -82,7 +82,7 @@ Student "*" --> "1" Group: Belongs to
 Student "1" -right-> "*" Relation: Creates
 Relation "*" -right-> "1" Teacher: Describes
 
-User --> Opinion : Has
+Student --> Opinion : Has
 Opinion --> Course: References
 
 @enduml

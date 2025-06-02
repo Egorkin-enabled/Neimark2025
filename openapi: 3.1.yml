@@ -69,10 +69,16 @@ components:
           type: string
         department:
           type: string
+        faculty:
+          type: string
         likes:
           type: integer
         dislikes:
           type: integer
+        courses:
+          type: array
+          items:
+            $ref: "#/components/schemas/course"
   responses:
     auth_success:
       description: Auth success
