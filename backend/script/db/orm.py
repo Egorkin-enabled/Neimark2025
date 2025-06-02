@@ -32,7 +32,9 @@ class Course(DB_Base):
     id: Mapped[int] = mapped_column(primary_key=True) 
     name: Mapped[str]
     user: Mapped[list['User']] = relationship('User', secondary='user_course', back_populates='courses')
+    daysOfWeek: Mapped[list['DayOfWeek']] = relationship('DayOfWeek', secondary='course_day_of_week', back_populates='courses')
     messages: Mapped[list['Message']] = relationship('Message')
+
 
 class Group(DB_Base):
     __tablename__ = 'group'
@@ -107,6 +109,7 @@ class DayOfWeek(DB_Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     week_number: Mapped[int]
     day_number: Mapped[int]
+    courses: Mapped[list[Course]] = relationship('DayOfWeek', secondary='course_day_of_week', back_populates='daysOfWeek')
 
 class Message(DB_Base):
     __tablename__ = 'message'
